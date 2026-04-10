@@ -210,10 +210,10 @@ function search() {
       ${dictionary[word].meaning}<br><br>
       <i>${dictionary[word].example}</i>
     `;
-  } else {
-  result.innerHTML = "🤖 AI válasz betöltése...";
+  else {
+   result.innerHTML = "🤖 AI válasz betöltése...";
 
-  fetch("https://eoxandha57qtqfr.m.pipedream.net", {
+   fetch("https://eoxandha57qtqfr.m.pipedream.net", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
