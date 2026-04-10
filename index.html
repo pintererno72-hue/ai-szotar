@@ -226,11 +226,7 @@ function search() {
   .then(data => {
     console.log(data); // 🔍 DEBUG
 
-    let aiText =
-      data.output?.[0]?.content?.[0]?.text ||
-      data.choices?.[0]?.message?.content ||
-      "Nincs válasz";
-
+   let aiText = data.text || "Nincs válasz";
     result.innerHTML = `
       <b>${word}</b><br><br>
       ${aiText}
