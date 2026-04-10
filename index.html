@@ -215,47 +215,47 @@ function search() {
   }
 
   // AI RÉSZ (STABIL)
-  result.innerHTML = "🤖 AI válasz betöltése...";
+result.innerHTML = "🤖 AI válasz betöltése...";
 
-  try {
-    fetch("https://eoxandha57qtqfr.m.pipedream.net", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ word: word })
-    })
-    .then(res => res.json())
-    .then(data => {
-      let aiText = data.text;
+fetch("https://api.allorigins.win/raw?url=https://eoxandha57qtqfr.m.pipedream.net", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ word: word })
+})
+.then(res => res.json())
+.then(data => {
+  let aiText = data.text;
 
-      if (!aiText) {
-        aiText = "⚠️ Nem jött válasz az AI-tól";
-      }
+  if (!aiText) {
+    aiText = "⚠️ Nem jött válasz az AI-tól";
+  }
 
-      lastText = aiText;
+  lastText = aiText;
 
-      result.innerHTML = `
-        <b>${word}</b><br><br>
-        ${aiText}
-      `;
-    })
-    .catch(() => {
-      // HA AI NEM MEGY → FALLBACK
-      let fallback = `
+  result.innerHTML = `
+    <b>${word}</b><br><br>
+    ${aiText}
+  `;
+})
+.catch(err => {
+  console.log(err);
+
+  let fallback = `
 A "${word}" egy informatikai kifejezés.
 
 👉 Jelentése a kontextustól függ.
 📌 Próbáld pontosabban megfogalmazni.
-      `;
+  `;
 
-      lastText = fallback;
+  lastText = fallback;
 
-      result.innerHTML = `
-        <b>${word}</b><br><br>
-        ${fallback}
-      `;
-    });
+  result.innerHTML = `
+    <b>${word}</b><br><br>
+    ${fallback}
+  `;
+});
 
   } catch {
     result.innerHTML = "⚠️ Hiba történt";
