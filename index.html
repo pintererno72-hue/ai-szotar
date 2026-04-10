@@ -108,7 +108,7 @@ function showSuggestions(value) {
   if (!value) return;
 
   const matches = Object.keys(dictionary).filter(word =>
-    word.startsWith(value)
+    word.includes(value)
   );
 
   matches.forEach(word => {
