@@ -225,7 +225,9 @@ function search() {
   return res.json();
 })
 .then(data => {
-  let aiText = data.text || "Nincs válasz";
+  console.log(data);
+
+  let aiText = data.text || data.body?.text || "Nincs válasz";
 
   lastText = aiText;
 
