@@ -227,7 +227,10 @@ function search() {
 .then(data => {
   console.log(data);
 
-  let aiText = data.text || data.body?.text || "Nincs válasz";
+  let aiText =
+    data.text ||
+    data.body?.text ||
+    JSON.stringify(data);
 
   lastText = aiText;
 
