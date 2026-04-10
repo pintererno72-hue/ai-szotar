@@ -201,32 +201,33 @@ function search() {
 
   if (dictionary[word]) {
     lastText = dictionary[word].meaning;
+
     result.innerHTML = `
       <b>${word}</b><br><br>
       ${dictionary[word].meaning}<br><br>
       <i>${dictionary[word].example}</i>
     `;
-  else {
-  lastText = "AI válasz generálása...";
-
-  result.innerHTML = `
-    <b>${word}</b><br><br>
-    🤖 AI válasz generálása...<br><br>
-  `;
-
-  setTimeout(() => {
-    const aiText = fakeAI(word);
-
-    lastText = aiText;
+  } else {
+    lastText = "AI válasz generálása...";
 
     result.innerHTML = `
       <b>${word}</b><br><br>
-      ${aiText}<br><br>
-      <i>(AI generált válasz)</i>
+      🤖 AI válasz generálása...<br><br>
     `;
-  }, 1000);
-}
 
+    setTimeout(() => {
+      const aiText = fakeAI(word);
+
+      lastText = aiText;
+
+      result.innerHTML = `
+        <b>${word}</b><br><br>
+        ${aiText}<br><br>
+        <i>(AI generált válasz)</i>
+      `;
+    }, 1000);
+  }
+}
 // ENTER = azonnali keresés
 document.getElementById("input").addEventListener("input", function() {
   const value = this.value.toLowerCase();
