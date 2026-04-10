@@ -152,6 +152,8 @@ function search() {
 
 // ENTER = azonnali keresés
 document.getElementById("input").addEventListener("input", function() {
+  const value = this.value.toLowerCase();
+  showSuggestions(value);
   search();
 });
 
