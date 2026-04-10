@@ -214,20 +214,18 @@ function search() {
     return;
   }
 
-  // AI RÉSZ (STABIL)
-else {
+  // AI (fallback verzió – stabil)
   result.innerHTML = "🤖 AI válasz betöltése...";
 
   fetch("https://eoxandha57qtqfr.m.pipedream.net", {
     method: "POST",
-    mode: "no-cors",   // 💥 EZ A KULCS
+    mode: "no-cors",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({ word: word })
   });
 
-  // 💥 MIVEL no-cors NEM AD VÁLASZT → fallback AI
   let fallback = `A "${word}" egy olyan kifejezés, amely az informatikában használatos.
 👉 Jelentése a kontextustól függ.
 📌 Próbáld pontosabban megfogalmazni.`;
@@ -240,10 +238,7 @@ else {
   `;
 }
 
-  } catch {
-    result.innerHTML = "⚠️ Hiba történt";
-  }
-}
+  
 // ENTER = azonnali keresés
 document.getElementById("input").addEventListener("input", function() {
   const value = this.value.toLowerCase();
