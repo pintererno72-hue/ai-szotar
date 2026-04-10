@@ -143,7 +143,13 @@ function search() {
     `;
   } else {
     lastText = "Nincs a szótárban.";
-    result.innerHTML = `Nincs a szótárban.`;
+    result.innerHTML = `
+  <b>Nincs találat ❌</b><br><br>
+  👉 Próbáld meg így:<br>
+  - rövidebb szó<br>
+  - angolul<br>
+  - másik kifejezéssel
+`;
   }
 }
 
