@@ -224,16 +224,23 @@ function search() {
   })
   .then(res => res.json())
   .then(data => {
-    const aiText = data.output[0].content[0].text;
+    console.log(data); // 🔍 DEBUG
+
+    let aiText =
+      data.output?.[0]?.content?.[0]?.text ||
+      data.choices?.[0]?.message?.content ||
+      "Nincs válasz";
 
     result.innerHTML = `
       <b>${word}</b><br><br>
       ${aiText}
     `;
   })
-  .catch(() => {
+  .catch(err => {
+    console.log(err);
     result.innerHTML = "Hiba történt 😢";
   });
+}
 }
 // ENTER = azonnali keresés
 document.getElementById("input").addEventListener("input", function() {
