@@ -203,14 +203,15 @@ function search() {
   }
 
   if (dictionary[word]) {
-    lastText = dictionary[word].meaning;
+  lastText = dictionary[word].meaning;
 
-    result.innerHTML = `
-      <b>${word}</b><br><br>
-      ${dictionary[word].meaning}<br><br>
-      <i>${dictionary[word].example}</i>
-    `;
- else {
+  result.innerHTML = `
+    <b>${word}</b><br><br>
+    ${dictionary[word].meaning}<br><br>
+    <i>${dictionary[word].example}</i>
+  `;
+}
+else {
   result.innerHTML = "🤖 AI válasz betöltése...";
 
   fetch("https://eoxandha57qtqfr.m.pipedream.net", {
@@ -224,9 +225,10 @@ function search() {
   })
   .then(res => res.json())
   .then(data => {
-    console.log(data); // 🔍 DEBUG
+    console.log(data);
 
-   let aiText = data.text || "Nincs válasz";
+    let aiText = data.text || "Nincs válasz";
+
     result.innerHTML = `
       <b>${word}</b><br><br>
       ${aiText}
@@ -236,7 +238,6 @@ function search() {
     console.log(err);
     result.innerHTML = "Hiba történt 😢";
   });
-}
 }
 // ENTER = azonnali keresés
 document.getElementById("input").addEventListener("input", function() {
