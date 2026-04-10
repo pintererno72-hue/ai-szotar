@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ai szótár</title>
+
+<style>
+body {
+  margin: 0;
+  background: #0E0E1A;
+  color: white;
+  font-family: Arial;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  width: 90%;
+  max-width: 400px;
+}
+
+h1 {
+  text-align: center;
+  color: #C0B9FF;
+}
+
+input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  background: #6C5ECC;
+  color: white;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.result {
+  margin-top: 15px;
+  padding: 15px;
+  background: #1a1a2e;
+  border-radius: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>ai szótár</h1>
+
+  <input id="input" placeholder="Írd be vagy mondd..." />
+  
+  <button onclick="search()">Keresés</button>
+  <button onclick="startVoice()">🎤 Beszéd</button>
+  <button onclick="speak()">🔊 Felolvasás</button>
+
+  <div class="result" id="result">Írj vagy mondj egy szót...</div>
+</div>
+
+<script>
+
+// OFFLINE SZÓTÁR
+const dictionary = {
+  "api": {
+    meaning: "Kapcsolat két rendszer között.",
+    example: "Az app API-n keresztül kér adatot."
+  },
+  "frontend": {
+    meaning: "A felhasználó által látott felület.",
+    example: "A gombok a frontend részei."
+  },
+  "backend": {
+    meaning: "A háttérben futó logika.",
+    example: "Az adatbázis a backend része."
+  }
+};
+
+let lastText = "";
+
+// KERESÉS
+function search() {
+  const word = document.getElementById("input").value.toLowerCase().trim();
+  const result = document.getElementById("result");
+
+  if (!word) {
+    result.innerText = "Írj be egy szót.";
+    return;
+  }
+
+  if (dictionary[word]) {
+    lastText = dictionary[word].meaning;
+    result.innerHTML = `
+      <b>${word}</b><br><br>
+      ${dictionary[word].meaning}<br><br>
+      <i>${dictionary[word].example}</i>
+    `;
+  } else {
+    lastText = "Nincs a szótárban.";
+    result.innerHTML = `Nincs a szótárban.`;
+  }
+}
+
+// ENTER = azonnali keresés
+document.getElementById("input").addEventListener("input", function() {
+  search();
+});
+
+// 🎤 HANG FELISMERÉS
+function startVoice() {
+  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.lang = "hu-HU";
+
+  recognition.onresult = function(event) {
+    const text = event.results[0][0].transcript;
+    document.getElementById("input").value = text;
+    search();
+  };
+
+  recognition.start();
+}
+
+// 🔊 FELolvasás
+function speak() {
+  if (!lastText) return;
+
+  const speech = new SpeechSynthesisUtterance(lastText);
+  speech.lang = "hu-HU";
+  speechSynthesis.speak(speech);
+}
+
+</script>
+
+</body>
+</html>
