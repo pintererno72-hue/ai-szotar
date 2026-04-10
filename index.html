@@ -211,29 +211,33 @@ function search() {
       <i>${dictionary[word].example}</i>
     `;
   } else {
-    result.innerHTML = "🤖 AI válasz betöltése...";
+  result.innerHTML = "🤖 AI válasz betöltése...";
 
-   fetch("https://corsproxy.io/?https://eoxandha57qtqfr.m.pipedream.net", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({ word: word })
-})
-.then(res => {
-  if (!res.ok) throw new Error("Hálózati hiba");
-  return res.json();
-})
-.then(data => {
-  console.log(data);
+  fetch("https://eoxandha57qtqfr.m.pipedream.net", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ word: word })
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
 
-  let aiText =
-    data.text ||
-    data.body?.text ||
-    JSON.stringify(data);
+    let aiText = data.text || "Nincs válasz";
 
-  lastText = aiText;
+    lastText = aiText;
 
+    result.innerHTML = `
+      <b>${word}</b><br><br>
+      ${aiText}
+    `;
+  })
+  .catch(err => {
+    console.log(err);
+    result.innerHTML = "⚠️ AI nem elérhető";
+  });
+}
   result.innerHTML = `
     <b>${word}</b><br><br>
     ${aiText}
