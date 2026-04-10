@@ -215,39 +215,22 @@ function search() {
   }
 
   // AI RÉSZ (STABIL)
-result.innerHTML = "🤖 AI válasz betöltése...";
+else {
+  result.innerHTML = "🤖 AI válasz betöltése...";
 
-fetch("https://api.allorigins.win/raw?url=https://eoxandha57qtqfr.m.pipedream.net", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({ word: word })
-})
-.then(res => res.json())
-.then(data => {
-  let aiText = data.text;
+  fetch("https://eoxandha57qtqfr.m.pipedream.net", {
+    method: "POST",
+    mode: "no-cors",   // 💥 EZ A KULCS
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ word: word })
+  });
 
-  if (!aiText) {
-    aiText = "⚠️ Nem jött válasz az AI-tól";
-  }
-
-  lastText = aiText;
-
-  result.innerHTML = `
-    <b>${word}</b><br><br>
-    ${aiText}
-  `;
-})
-.catch(err => {
-  console.log(err);
-
-  let fallback = `
-A "${word}" egy informatikai kifejezés.
-
+  // 💥 MIVEL no-cors NEM AD VÁLASZT → fallback AI
+  let fallback = `A "${word}" egy olyan kifejezés, amely az informatikában használatos.
 👉 Jelentése a kontextustól függ.
-📌 Próbáld pontosabban megfogalmazni.
-  `;
+📌 Próbáld pontosabban megfogalmazni.`;
 
   lastText = fallback;
 
@@ -255,7 +238,7 @@ A "${word}" egy informatikai kifejezés.
     <b>${word}</b><br><br>
     ${fallback}
   `;
-});
+}
 
   } catch {
     result.innerHTML = "⚠️ Hiba történt";
