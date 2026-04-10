@@ -206,16 +206,25 @@ function search() {
       ${dictionary[word].meaning}<br><br>
       <i>${dictionary[word].example}</i>
     `;
-  } else {
-    lastText = "Nincs a szótárban.";
+  else {
+  lastText = "AI válasz generálása...";
+
+  result.innerHTML = `
+    <b>${word}</b><br><br>
+    🤖 AI válasz generálása...<br><br>
+  `;
+
+  setTimeout(() => {
+    const aiText = fakeAI(word);
+
+    lastText = aiText;
+
     result.innerHTML = `
-  <b>Nincs találat ❌</b><br><br>
-  👉 Próbáld meg így:<br>
-  - rövidebb szó<br>
-  - angolul<br>
-  - másik kifejezéssel
-`;
-  }
+      <b>${word}</b><br><br>
+      ${aiText}<br><br>
+      <i>(AI generált válasz)</i>
+    `;
+  }, 1000);
 }
 
 // ENTER = azonnali keresés
@@ -247,7 +256,10 @@ function speak() {
   speech.lang = "hu-HU";
   speechSynthesis.speak(speech);
 }
-
+function fakeAI(word) {
+  return `A "${word}" egy olyan kifejezés, amely az informatikában használatos. 
+Általában egy rendszer, folyamat vagy technológia része.`;
+}
 </script>
 
 </body>
