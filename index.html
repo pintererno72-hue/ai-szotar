@@ -3,10 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="manifest" href="manifest.json">
-
-<title>ai szótár</title>
+<title>AI szótár</title>
 
 <style>
 body {
@@ -19,31 +16,15 @@ body {
   align-items: center;
   height: 100vh;
 }
-#suggestions {
-  background: #1a1a2e;
-  border-radius: 10px;
-  margin-top: 5px;
-}
-
-.suggestion {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.suggestion:hover {
-  background: #6C5ECC;
-}
 .container {
   width: 90%;
   max-width: 400px;
 }
-
 h1 {
   text-align: center;
   color: #C0B9FF;
 }
-
-input {
+input, button {
   width: 100%;
   padding: 15px;
   border-radius: 10px;
@@ -51,33 +32,15 @@ input {
   margin-bottom: 10px;
   font-size: 16px;
 }
-
 button {
-  width: 100%;
-  padding: 15px;
-  border-radius: 10px;
-  border: none;
   background: #6C5ECC;
   color: white;
-  font-size: 16px;
-  margin-bottom: 5px;
 }
-
 .result {
-  margin-top: 15px;
+  margin-top: 10px;
   padding: 15px;
   background: #1a1a2e;
   border-radius: 10px;
-  line-height: 1.5;
-}
-  .result b {
-  color: #C0B9FF;
-  font-size: 18px;
-}
-
-.result i {
-  color: #aaa;
-  font-size: 14px;
 }
 </style>
 </head>
@@ -85,112 +48,36 @@ button {
 <body>
 
 <div class="container">
-  <h1>ai szótár</h1>
+  <h1>AI szótár</h1>
 
-  <input id="input" placeholder="Írd be vagy mondd..." />
-  <div id="suggestions"></div>
+  <input id="input" placeholder="Írj be egy szót..." />
   <button onclick="search()">Keresés</button>
   <button onclick="startVoice()">🎤 Beszéd</button>
   <button onclick="speak()">🔊 Felolvasás</button>
 
-  <div class="result" id="result">Írj vagy mondj egy szót...</div>
+  <div class="result" id="result">Írj be egy szót...</div>
 </div>
 
 <script>
 
-// OFFLINE SZÓTÁR
 const dictionary = {
-  "api": {
-    meaning: "Kapcsolat két rendszer között.",
-    example: "Az app API-n keresztül kér adatot."
-  },
-  "frontend": {
-    meaning: "A felhasználó által látott felület.",
-    example: "A gombok a frontend részei."
-  },
-  "backend": {
-    meaning: "A háttérben futó logika.",
-    example: "Az adatbázis a backend része."
-  },
-  "database": {
-    meaning: "Adatok tárolására szolgáló rendszer.",
-    example: "Az adatokat adatbázisban tároljuk."
-  },
-  "server": {
-    meaning: "Számítógép, ami adatokat szolgáltat.",
-    example: "A szerver válaszol a kérésekre."
-  },
-  "client": {
-    meaning: "A felhasználó eszköze vagy alkalmazása.",
-    example: "A böngésző egy kliens."
-  },
-  "bug": {
-    meaning: "Hiba a programban.",
-    example: "A bug miatt nem működik az app."
-  },
-  "deploy": {
-    meaning: "Alkalmazás élesítése.",
-    example: "A kódot deploy-oljuk a szerverre."
-  },
-  "ui": {
-    meaning: "Felhasználói felület.",
-    example: "A UI határozza meg a kinézetet."
-  },
-  "ux": {
-    meaning: "Felhasználói élmény.",
-    example: "A UX határozza meg a használhatóságot."
-  },
-  "function": {
-    meaning: "Újrahasználható kódrész.",
-    example: "A function elvégzi a feladatot."
-  },
-  "variable": {
-    meaning: "Adattároló a programban.",
-    example: "A variable értéket tárol."
-  },
-  "array": {
-    meaning: "Lista több adattal.",
-    example: "Az array több elemet tartalmaz."
-  },
-  "object": {
-    meaning: "Kulcs-érték párokból álló adat.",
-    example: "Az object strukturált adat."
-  },
-  "loop": {
-    meaning: "Ismétlődő végrehajtás.",
-    example: "A loop többször fut le."
-  },
-  "condition": {
-    meaning: "Feltétel alapú döntés.",
-    example: "Az if condition ellenőrzi az értéket."
-  }
+  api: "Kapcsolat két rendszer között.",
+  frontend: "Felhasználó által látott rész.",
+  backend: "Háttérben futó logika."
 };
 
-function showSuggestions(value) {
-  const box = document.getElementById("suggestions");
-  box.innerHTML = "";
-
-  if (!value) return;
-
-  const matches = Object.keys(dictionary).filter(word =>
-    word.includes(value)
-  );
-
-  matches.forEach(word => {
-  const div = document.createElement("div");
-  div.className = "suggestion";
-  div.innerText = word;
-
-  div.onclick = () => {
-    document.getElementById("input").value = word;
-    box.innerHTML = "";
-    search();
-  };
-
-  box.appendChild(div);
-});
-}
 let lastText = "";
+
+// FAKE AI (stabil)
+function fakeAI(word) {
+  return `"${word}" egy informatikai vagy általános kifejezés.
+
+👉 Jelentése a kontextustól függ.
+👉 Gyakran valamilyen rendszerhez, folyamathoz vagy technológiához kapcsolódik.
+
+📌 Példa:
+A "${word}" használata segít megérteni egy adott rendszer működését.`;
+}
 
 // KERESÉS
 function search() {
@@ -202,76 +89,37 @@ function search() {
     return;
   }
 
-  // SZÓTÁR
   if (dictionary[word]) {
-    lastText = dictionary[word].meaning;
-
-    result.innerHTML = `
-      <b>${word}</b><br><br>
-      ${dictionary[word].meaning}<br><br>
-      <i>${dictionary[word].example}</i>
-    `;
-    return;
+    lastText = dictionary[word];
+    result.innerHTML = `<b>${word}</b><br><br>${dictionary[word]}`;
+  } else {
+    let ai = fakeAI(word);
+    lastText = ai;
+    result.innerHTML = `<b>${word}</b><br><br>${ai}`;
   }
-
-  // AI (fallback verzió – stabil)
-  result.innerHTML = "🤖 AI válasz betöltése...";
-
-  fetch("https://eoxandha57qtqfr.m.pipedream.net", {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ word: word })
-  });
-
-  let fallback = `A "${word}" egy olyan kifejezés, amely az informatikában használatos.
-👉 Jelentése a kontextustól függ.
-📌 Próbáld pontosabban megfogalmazni.`;
-
-  lastText = fallback;
-
-  result.innerHTML = `
-    <b>${word}</b><br><br>
-    ${fallback}
-  `;
 }
 
-  
-// ENTER = azonnali keresés
-document.getElementById("input").addEventListener("input", function() {
-  const value = this.value.toLowerCase();
-  showSuggestions(value);
-  search();
-});
-
-// 🎤 HANG FELISMERÉS
+// HANG
 function startVoice() {
   const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
   recognition.lang = "hu-HU";
 
   recognition.onresult = function(event) {
-    const text = event.results[0][0].transcript;
-    document.getElementById("input").value = text;
+    document.getElementById("input").value = event.results[0][0].transcript;
     search();
   };
 
   recognition.start();
 }
 
-// 🔊 FELolvasás
+// FELolvasás
 function speak() {
   if (!lastText) return;
-
   const speech = new SpeechSynthesisUtterance(lastText);
   speech.lang = "hu-HU";
   speechSynthesis.speak(speech);
 }
-function fakeAI(word) {
-  return `A "${word}" egy olyan kifejezés, amely az informatikában használatos. 
-Általában egy rendszer, folyamat vagy technológia része.`;
-}
+
 </script>
 
 </body>
