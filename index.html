@@ -117,13 +117,10 @@ function showSuggestions(value) {
     div.innerText = word;
 
     div.onclick = () => {
-      document.getElementById("input").value = word;
-      search();
-      box.innerHTML = "";
-    };
-
-    box.appendChild(div);
-  });
+  document.getElementById("input").value = word;
+  box.innerHTML = "";
+  search();
+};
 }
 let lastText = "";
 
