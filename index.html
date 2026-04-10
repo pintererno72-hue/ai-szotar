@@ -16,7 +16,20 @@ body {
   align-items: center;
   height: 100vh;
 }
+#suggestions {
+  background: #1a1a2e;
+  border-radius: 10px;
+  margin-top: 5px;
+}
 
+.suggestion {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestion:hover {
+  background: #6C5ECC;
+}
 .container {
   width: 90%;
   max-width: 400px;
@@ -62,7 +75,7 @@ button {
   <h1>ai szótár</h1>
 
   <input id="input" placeholder="Írd be vagy mondd..." />
-  
+  <div id="suggestions"></div>
   <button onclick="search()">Keresés</button>
   <button onclick="startVoice()">🎤 Beszéd</button>
   <button onclick="speak()">🔊 Felolvasás</button>
@@ -88,6 +101,30 @@ const dictionary = {
   }
 };
 
+function showSuggestions(value) {
+  const box = document.getElementById("suggestions");
+  box.innerHTML = "";
+
+  if (!value) return;
+
+  const matches = Object.keys(dictionary).filter(word =>
+    word.startsWith(value)
+  );
+
+  matches.forEach(word => {
+    const div = document.createElement("div");
+    div.className = "suggestion";
+    div.innerText = word;
+
+    div.onclick = () => {
+      document.getElementById("input").value = word;
+      search();
+      box.innerHTML = "";
+    };
+
+    box.appendChild(div);
+  });
+}
 let lastText = "";
 
 // KERESÉS
