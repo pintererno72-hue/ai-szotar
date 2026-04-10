@@ -112,15 +112,18 @@ function showSuggestions(value) {
   );
 
   matches.forEach(word => {
-    const div = document.createElement("div");
-    div.className = "suggestion";
-    div.innerText = word;
+  const div = document.createElement("div");
+  div.className = "suggestion";
+  div.innerText = word;
 
-    div.onclick = () => {
-  document.getElementById("input").value = word;
-  box.innerHTML = "";
-  search();
-};
+  div.onclick = () => {
+    document.getElementById("input").value = word;
+    box.innerHTML = "";
+    search();
+  };
+
+  box.appendChild(div);
+});
 }
 let lastText = "";
 
