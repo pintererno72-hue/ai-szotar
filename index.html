@@ -213,25 +213,31 @@ function search() {
   } else {
     result.innerHTML = "🤖 AI válasz betöltése...";
 
-    fetch("https://eoxandha57qtqfr.m.pipedream.net", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ word: word })
-    })
-    .then(res => res.json())
-    .then(data => {
-      let aiText = data.text || "Nincs válasz";
+   fetch("https://eoxandha57qtqfr.m.pipedream.net", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ word: word })
+})
+.then(res => {
+  if (!res.ok) throw new Error("Hálózati hiba");
+  return res.json();
+})
+.then(data => {
+  let aiText = data.text || "Nincs válasz";
 
-      result.innerHTML = `
-        <b>${word}</b><br><br>
-        ${aiText}
-      `;
-    })
-    .catch(() => {
-      result.innerHTML = "Hiba történt 😢";
-    });
+  lastText = aiText;
+
+  result.innerHTML = `
+    <b>${word}</b><br><br>
+    ${aiText}
+  `;
+})
+.catch(err => {
+  console.log(err);
+  result.innerHTML = "⚠️ AI nem elérhető";
+});
   }
 }
 // ENTER = azonnali keresés
