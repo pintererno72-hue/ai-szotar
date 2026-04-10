@@ -202,6 +202,7 @@ function search() {
     return;
   }
 
+  // SZÓTÁR
   if (dictionary[word]) {
     lastText = dictionary[word].meaning;
 
@@ -210,43 +211,54 @@ function search() {
       ${dictionary[word].meaning}<br><br>
       <i>${dictionary[word].example}</i>
     `;
-   { else {
-   result.innerHTML = "🤖 AI válasz betöltése...";
+    return;
+  }
 
-   fetch("https://eoxandha57qtqfr.m.pipedream.net", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ word: word })
-  })
-  .then(res => res.json())
-  .then(data => {
-    console.log(data);
+  // AI RÉSZ (STABIL)
+  result.innerHTML = "🤖 AI válasz betöltése...";
 
-    let aiText = data.text || "Nincs válasz";
+  try {
+    fetch("https://eoxandha57qtqfr.m.pipedream.net", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ word: word })
+    })
+    .then(res => res.json())
+    .then(data => {
+      let aiText = data.text;
 
-    lastText = aiText;
+      if (!aiText) {
+        aiText = "⚠️ Nem jött válasz az AI-tól";
+      }
 
-    result.innerHTML = `
-      <b>${word}</b><br><br>
-      ${aiText}
-    `;
-  })
-  .catch(err => {
-    console.log(err);
-    result.innerHTML = "⚠️ AI nem elérhető";
-  });
-}
-  result.innerHTML = `
-    <b>${word}</b><br><br>
-    ${aiText}
-  `;
-})
-.catch(err => {
-  console.log(err);
-  result.innerHTML = "⚠️ AI nem elérhető";
-});
+      lastText = aiText;
+
+      result.innerHTML = `
+        <b>${word}</b><br><br>
+        ${aiText}
+      `;
+    })
+    .catch(() => {
+      // HA AI NEM MEGY → FALLBACK
+      let fallback = `
+A "${word}" egy informatikai kifejezés.
+
+👉 Jelentése a kontextustól függ.
+📌 Próbáld pontosabban megfogalmazni.
+      `;
+
+      lastText = fallback;
+
+      result.innerHTML = `
+        <b>${word}</b><br><br>
+        ${fallback}
+      `;
+    });
+
+  } catch {
+    result.innerHTML = "⚠️ Hiba történt";
   }
 }
 // ENTER = azonnali keresés
