@@ -210,26 +210,30 @@ function search() {
       ${dictionary[word].meaning}<br><br>
       <i>${dictionary[word].example}</i>
     `;
-  } else {
-    lastText = "AI válasz generálása...";
+ else {
+  result.innerHTML = "🤖 AI válasz betöltése...";
+
+  fetch("https://eoxandha57qtqfr.m.pipedream.net", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      word: word
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    const aiText = data.output[0].content[0].text;
 
     result.innerHTML = `
       <b>${word}</b><br><br>
-      🤖 AI válasz generálása...<br><br>
+      ${aiText}
     `;
-
-    setTimeout(() => {
-      const aiText = fakeAI(word);
-
-      lastText = aiText;
-
-      result.innerHTML = `
-        <b>${word}</b><br><br>
-        ${aiText}<br><br>
-        <i>(AI generált válasz)</i>
-      `;
-    }, 1000);
-  }
+  })
+  .catch(() => {
+    result.innerHTML = "Hiba történt 😢";
+  });
 }
 // ENTER = azonnali keresés
 document.getElementById("input").addEventListener("input", function() {
